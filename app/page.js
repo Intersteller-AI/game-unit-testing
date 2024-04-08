@@ -1,12 +1,13 @@
 "use client";
 
-import Home from "@/components/home/home";
-import { Suspense } from "react";
+import FirstTest from "@/components/FirstTest";
 
 export default function page() {
   return (
-    <Suspense>
-      <Home />
-    </Suspense>
+    <div className="w-full px-12 flex justify-center">
+      <div className="w-full max-w-[85rem]">
+        <FirstTest />
+      </div>
+    </div>
   );
 }
