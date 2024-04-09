@@ -17,7 +17,34 @@ This tutorial will guide you through writing unit tests in Next.js using [Jest](
 
 When building a website, it's crucial to ensure that each unit of your code works as expected. Unit tests help you achieve this by comparing the expected output with the actual output of your code.
 
-In this tutorial, we'll cover the basics of writing unit tests for Next.js Application. We'll use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
+## What to Test
+- Component Rendering: Test if components render correctly with or without props.
+- State Changes: Check how components render with different state changes.
+- User Interactions: Test how components react to user interactions.
+
+## What Not to Test
+- Actual Implementation: Focus on testing if components behave correctly, rather than testing the implementation of specific functionalities.
+- Third-Party Libraries: Avoid testing third-party libraries, assuming they are already tested and reliable.
+
+## Writing Tests
+- Use Testing Frameworks: Utilize Jest or React Testing Library for writing and running tests.
+- Test Descriptions: Write clear descriptions for each test to explain what is being tested.
+- Test Structure: Organize tests by component or functionality for better readability.
+- Isolation: Ensure each test is isolated and does not depend on the output of other tests.
+- Mocking: Use mocking to simulate external dependencies or functions not the focus of the test.
+
+## Sounds Complicated 😵 hmm?.
+
+Let me break it down for you. Any test in React, no matter how complicated, always follows this structure:
+
+- Render the component.
+- Get an element from the component and simulate any user interactions.
+- Write an assertion.
+
+<br>
+<br>
+
+So, In this tutorial, I'll cover the basics of writing unit tests for Next.js Application. We'll use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 ## Setting Up Your Project
 
@@ -271,13 +298,105 @@ describe('Testing API Calls', () => {
 });
 ```
 
+## Extra for navbar
+
+I have also write unit test for my navbar in which i am testing if all the text correctly rendering on the screen and other things are working as expected.
+
+```jsx
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import Navbar from '@/components/navbar/Navbar';
+import { useRouter } from "next/navigation"
+import userEvent from '@testing-library/user-event';
+
+describe('Navbar', () => {
+  describe('Rendering', () => {
+    it('renders logo, content, and navigation links', () => {
+      render(<Navbar />);
+      expect(screen.getByText('Unit Testing')).toBeInTheDocument();
+      expect(screen.getByText('First Test')).toBeInTheDocument();
+      expect(screen.getByText('Mock Data Tests')).toBeInTheDocument();
+      expect(screen.getByText('Test State changes')).toBeInTheDocument();
+      expect(screen.getByText('Test API')).toBeInTheDocument();
+      expect(screen.getByText('Sign In')).toBeInTheDocument();
+      expect(screen.getByText('Sign Up')).toBeInTheDocument();
+    });
+  });
+
+
+  describe("Navigation", () => {
+
+    // it("should navigate accordingly", async () => {
+
+    //   let pathname = '/';
+
+    //   const push = jest.fn().mockImplementation((url) => {
+    //     pathname = url;
+    //     return Promise.resolve(true);
+    //   });
+
+    //   useRouter.mockReturnValue({
+    //     pathname,
+    //     push,
+    //   });
+
+    //   render(<Navbar />)
+
+    //   await userEvent.click(screen.getByTestId('first-test'));
+    //   expect(pathname).toBe('/');
+
+    //   await userEvent.click(screen.getByTestId('mock-data-tests'));
+    //   expect(pathname).toBe('/mock-data-test');
+
+    //   await userEvent.click(screen.getByTestId('test-state-changes'));
+    //   expect(pathname).toBe('/test-state-change');
+
+    //   await userEvent.click(screen.getByTestId('test-api'));
+    //   expect(pathname).toBe('/test-api');
+    // })
+
+    it('clicking on logo redirects to the home page', () => {
+      delete window.location;
+      window.location = { href: '' };
+
+      render(<Navbar />);
+      fireEvent.click(screen.getByText('Unit Testing'));
+      expect(window.location.href).toBe('');
+    });
+  })
+
+  describe('Accessibility', () => {
+    it('all elements in the navbar are accessible', () => {
+      render(<Navbar />);
+      const navBar = screen.getByTestId('navigation-main');
+      expect(navBar).toHaveAttribute('aria-label', 'Main Navigation');
+    });
+  });
+
+
+  describe('Styling', () => {
+    it('navbar is styled correctly', () => {
+      render(<Navbar />);
+      const navBar = screen.getByRole('navigation');
+      expect(navBar).toHaveClass('w-full');
+      expect(navBar).toHaveClass('flex');
+      expect(navBar).toHaveClass('justify-center');
+      expect(navBar).toHaveClass('px-12');
+      expect(navBar).toHaveClass('bg-white');
+      expect(navBar).toHaveClass('drop-shadow');
+    });
+  });
+});
+```
+
+
 ## Conclusion
 
 Unit testing is essential for ensuring your React components work as expected. With Jest and React Testing Library, you can easily write and run tests for your components, user interactions, state updates, and API calls.
 
 ---
 
-Note - I have not included redirection with links testing in it, I have tried it but it did not worked in next.js for me if you can provide me any solution regarding it, then I would be very helpful for me
+Note - I have not included redirection with links testing in it, I have tried it but it did not worked in next.js for me if you can provide me any solution regarding it, then that would be very helpful for me
 
 Thanks
 
