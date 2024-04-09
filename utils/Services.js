@@ -1,6 +1,6 @@
 export const FetchData = () => {
   return fetch(
-    `https://newsapi.org/v2/top-headlines?country=in&page=2&apiKey=${process.env.NEXT_PUBLIC_API_KEY}`
+    `https://newsapi.org/v2/top-headlines?country=in&apiKey=29ed7e2bcc7f404a9eb642e288923a7e`
   ).then((res) => {
     return res.json();
   });
